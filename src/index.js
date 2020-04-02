@@ -3,7 +3,12 @@
 function buildLexer(tokens) {
   const SKIP_TYPE = 'SPACE';
   const ERROR_TYPE = 'ERROR';
-  const tokenNames = tokens.map((t) => t[0]);
+  const tokenNames = tokens.map((t) => {
+    if (t[0] === ERROR_TYPE) {
+      throw new Error('No \'ERROR\' type allowed!');
+    }
+    return t[0];
+  });
   const tokenRegs = tokens.map((t) => t[1]);
 
   const buildOrRegexp = (regexps) => {
