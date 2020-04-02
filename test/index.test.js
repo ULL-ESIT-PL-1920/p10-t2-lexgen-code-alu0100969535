@@ -32,15 +32,12 @@ function parseTest(string, expected) {
 }
 
 const str = 'const varName = "value"';
-
 const expected = [
   {type: 'RESERVEDWORD', value: 'const'},
   {type: 'ID', value: 'varName'},
   {type: 'OP', value: '='},
   {type: 'STRING', value: '"value"'},
 ];
-
-parseTest(str, expected);
 
 const str2 = 'let x = a + \nb';
 const expected2 = [
@@ -52,8 +49,6 @@ const expected2 = [
   {type: 'ID', value: 'b'},
 ];
 
-parseTest(str2, expected2);
-
 const str3 = ' // Entrada con errores\nlet x = 42*c';
 const expected3 = [
   {type: 'RESERVEDWORD', value: 'let'},
@@ -62,5 +57,17 @@ const expected3 = [
   {type: 'ERROR', value: '42*c'},
 ];
 
-parseTest(str3, expected3);
+describe('Correct output', () => {
+  parseTest(str, expected);
+  parseTest(str2, expected2);
+  parseTest(str3, expected3);
+});
 
+describe('Making it fail', () => {
+  test('No \'ERROR\' token allowed in input', () => {
+    expect(() => {
+      const error = /someregexp/y;
+      const lexer2 = buildLexer([['SPACE', SPACE], ['ERROR', error]]);
+    }).toThrow();
+  });
+});
